@@ -1,0 +1,7 @@
+
+
+
+mode = backup
+backup_to = /media/新卷/casper/2010-11-04_200348.squashfs
+2010-11-04 20:04:21  Backing up current system to /media/新卷/casper/2010-11-04_200348.squashfs...
+2010-11-04 20:09:26  System has been backed up. 5 minutes and 4 seconds elapsed.

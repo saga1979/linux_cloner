@@ -1,0 +1,179 @@
+目录
+
+1 简介
+2 适用性说明
+3 图形界面模式运行方法 
+4 功能说明及注意事项（请务必仔细阅读） 
+5 其它注意事项 
+6 如何制作 Live 系统 
+7 应用举例 
+8 命令行模式使用示例
+
+
+
+
+
+1 简介
+
+UCloner (原名 ubuntu-cloner ) 是针对 Ubuntu Linux 编写的一个系统备份、恢复、克隆工具；
+可将 ubuntu 系统备份为 squashfs 映像文件，也可从映像文件中恢复系统，与 GHOST 类似；
+可以直接将系统克隆到其它硬盘分区；
+可用来制作 Live 系统；
+同时具有命令行和图形界面，以满足不同用户需求；
+UCloner 是开源软件，遵循 GPL v2/v3 协议。
+
+论坛：http://forum.ubuntu.org.cn/viewtopic.php?f=77&t=176612
+项目主页：http://code.google.com/p/ucloner/
+作者邮箱：ptptptptptpt@163.com
+
+
+
+
+2 适用性说明
+
+UCloner 10.10.x 适用于 Ubuntu 10.10、10.04、9.10；
+UCloner 3.6.1 适用于 Ubuntu 9.04。
+
+
+
+
+
+3 图形界面运行方法 
+
+Ubuntu 或 Xubuntu：猛击 UCloner_CN（中文版）或 UCloner_EN（英文版）。若弹出对话框,选“运行”。
+Kubuntu 或 Lubuntu：打开终端，运行  sudo apt-get install python-gtk2 zenity python-vte ；
+                    然后进入 UCloner-10.10.x/program 目录，运行  sudo ./ucloner_gui.py  。
+
+注意：不要把 UCloner 解压到 Fat32 分区！否则会丢失可执行权限，导致无法运行。建议解压到用户主目录。
+
+
+
+
+
+4 功能说明及注意事项（请务必仔细阅读） 
+
+
+4.1 备份 
+
+将当前系统备份为一个映像文件。这点与 Ghost 不太一样。Ghost 一般是在另一个系统(如
+DOS、WinPE 等)中备份非活动的 windows 系统。而 Linux 可以自己备份自己（Win7 也提
+供了类似的功能）。备份时会自动排除常规挂载目录 /mnt 和 /media 。如果您设定了其它
+挂载点(如 /windows/* 、/home/*/win_c 之类),可手动指定排除之。
+ 
+还要注意某些可能含有大文件的缓存目录,如 /home/*/.aMule/Temp 等。如果您备份出的映像
+文件异常的大,很可能是把下载的电影也包进去了。
+
+注意：目前不支持加密主目录的系统；备份前需安装 squashfs-tools 。
+
+
+4.2 恢复 
+
+从映像文件中恢复系统。此操作须在另一系统(如 Ubuntu Live CD)中进行，此系统必须与系统映像
+版本相同,否则可能导致恢复失败或出现某些奇怪的问题。
+
+恢复时，分区设定不要求与备份时相同。例如，备份时系统有独立的 /boot 分区，恢复时则可以没有；
+备份时系统没有独立的 /home 分区，并不妨碍恢复时指定一个独立的 /home 分区。
+
+图形界面下仅提供了 3 个可选分区: / 、/home 和 swap 。/ 分区及其文件系统必须指定，而 /home 
+和 swap 则可以留空。如果 /home 留空，则恢复后的系统不使用独立的 /home 分区；如果 swap 留
+空，则恢复后的系统不使用 swap 分区。
+
+对于普通桌面用户,这三个分区足够了。不必盲目追随一些过时的教程。比如，把 /boot 单独分区，是因
+为曾经 bios 不能访问硬盘 1024 柱面后的内容,因此要把启动文件放在硬盘靠前的部分。如今这问题早
+就不存在了。而把 /var 、/tmp 等单独分区,一般是用在服务器上,普通用户无此必要。
+
+grub 安装位置提供三个选择：留空，“目标根分区”，或“目标根分区所在硬盘”。
+如果留空，则不安装 grub。
+如果选“目标根分区”(如 /dev/sda5 )，将把 grub 安装到该分区的引导扇区。
+如果选“目标根分区所在硬盘”(如 /dev/sda )，将把 grub 安装到该硬盘 MBR。
+
+新主机名如果留空，将保持原主机名。
+
+
+4.3 克隆 
+
+很多用户对这个功能比较迷惑，主要是因为 windows 系统没有对应的操作。其实就是把当前的系
+统复制一份传送到其它分区（可以在不同硬盘）中，简单说就是一个变俩。相当于把备份和恢复
+合在一起，并略过生成映像文件的步骤。
+
+
+
+
+
+
+
+5 其它注意事项 
+
+某些第三方分区工具不够“好”,比如,不给分区分配 UUID、创建的文件系统与 ubuntu 所用的版本
+不同,等等。如果是用 ubuntu 自带的 Gparted (分区编辑器) 分的区,则可以选择“不格式化,使用
+现有文件系统”。
+
+
+
+
+
+
+
+6 如何把当前使用的系统做成 Live 系统
+
+(1) 安装 lupin-casper： sudo apt-get install lupin-casper ；
+(2) 用 UCloner 备份当前系统，文件名后缀必须为 .squashfs （默认即是）；
+(3) 在任意 fat/ntfs/ext 分区根目录创建一个名为 casper 的目录（注意，其它分区不可再有同名目录）；
+(4) 将系统备份文件拷贝到 casper 目录；
+(5) 到 /boot 中将当前使用的内核和 initrd 文件也拷贝到 casper 目录（可用 echo initrd.img-`uname -r` vmlinuz-`uname -r` 来查看文件名）；
+(6) 建立启动项。以 grub4dos 为例：
+
+title Live Ubuntu
+find --set-root /casper/内核文件名
+kernel /casper/内核文件名 boot=casper ro ignore_uuid
+initrd /casper/initrd文件名
+
+ 将其中的 “内核文件名” 和 “initrd文件名” 用相应的文件名替换。
+
+
+
+
+
+
+
+
+
+7 应用举例 
+
+7.1
+将 ubuntu 系统安装到移动硬盘中，配置好。拿到目标机上，从usb启动移动硬盘中的系统，运行
+ Ucloner ，选择“克隆”功能，按提示进行，即可将移动硬盘中的系统克隆到目标机中。
+
+7.2
+在一个安装、配置好的 ubuntu 系统中运行 Ucloner ，选择“备份”功能，可将当前系统备份为 
+squashfs 映像文件。将备份文件拷到u盘或移动硬盘。在目标机上通过光盘或 USB 启动 ubuntu 
+live cd ，接上存有系统备份文件的u盘或移动硬盘，运行 Ucloner ，选择“恢复”功能，按提示进行，
+即可将系统映像恢复到目标机中。
+
+7.3
+（待续）
+
+
+
+
+
+
+
+
+
+
+8 命令行模式使用示例 
+
+克隆：
+sudo  ./ucloner_cmd.py  mode=clone  lang=cn   /=/dev/sda2  /_fs=ext4   /home=/dev/sda3  /home_fs=reiserfs   /boot=/dev/sda4  /boot_fs=reiserfs   /usr/local=/dev/sda5  /usr/local_fs=ext4   /usr=/dev/sda6  /usr_fs=xfs    /var=/dev/sda7  /var_fs=jfs   grubdev=/dev/sda   swap=/dev/sda8   exclude=/home/pt/movies  exclude=/home/pt/music
+
+备份：
+sudo  ./ucloner_cmd.py  mode=backup  lang=cn   backup_to=/media/disk-1/ubuntu-10.04.squashfs   exclude=/home/pt/movies  exclude=/home/pt/music
+
+恢复：
+sudo  ./ucloner_cmd.py  mode=restore  lang=cn   restore_from=/media/disk-1/ubuntu-10.04.squashfs   /=/dev/sda2  /_fs=ext4   /home=/dev/sda3  /home_fs=reiserfs   /boot=/dev/sda4  /boot_fs=reiserfs   /usr/local=/dev/sda5  /usr/local_fs=ext4   /usr=/dev/sda6  /usr_fs=xfs    /var=/dev/sda7  /var_fs=jfs   grubdev=/dev/sda   swap=/dev/sda8 
+
+
+
+
+

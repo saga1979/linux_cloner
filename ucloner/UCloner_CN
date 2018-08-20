@@ -1,0 +1,13 @@
+#!/bin/sh
+
+export LANGUAGE=zh_CN
+
+if [ "$( ps -A | grep ucloner_gui)" ] ; then
+    zenity --title="错误" --error --text="已经有一个 UCloner 在运行了！"
+    exit 1
+fi
+
+cd ./program
+exec gksu ./ucloner_gui.py &> /dev/null
+
+

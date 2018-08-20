@@ -1,0 +1,65 @@
+第1步：生成模板文件
+
+xgettext -o ucloner.pot -k_  *.py glade/*.glade
+
+
+
+
+第2步：生成po文件
+
+msgmerge -U zh_CN.po ucloner.pot    （如果是第一次，运行： msginit -l zh_CN -i ucloner.pot  ）
+
+
+
+
+第3步：翻译
+
+打开生成的“zh_CN.po”文件，把前面的一行
+"Content-Type: text/plain; charset=ASCII\n"
+修改成
+"Content-Type: text/plain; charset=utf-8\n"
+
+翻译文件后面的字符串，并消除 fuzzy。注意文件要保存为UTF-8编码
+
+
+
+第4步：编译成mo文件
+
+msgfmt -o locale/zh_CN/LC_MESSAGES/ucloner.mo zh_CN.po
+
+（如果是第一次，需要先建立子目录： mkdir -p locale/zh_CN/LC_MESSAGES/ ）
+
+
+
+
+
+测试：
+
+env LANGUAGE=zh_CN gksu ./ucloner_gui.py
+
+env LANGUAGE=en_US gksu ./ucloner_gui.py
+
+
+
+
+
+更新语言文件
+在后来程序源码更新后，需要追加新的字符串到语言文件中，过程与上述步骤基本相同，只是“生成po文件”一步（即执行msginit来创建新的po文件）的操作，换成从新的pot合并到原有po文件
+msgmerge -U zh_CN.po ucloner.pot
+这样zh_CN.po的就包含了新的字符串，翻译它们在编译成mo文件就行了。msgmerge支持模糊合并的，也就是某些字符串如果改动不大的话，也会合并翻译，并带上“#fuzzy”方便你复查。
+
+
+
+
+
+
+
+
+
+------------------ 感谢 ---------------------
+
+Python程序及Glade文件国际化方法
+日期：2010-08-06 作者：muzuiget
+http://qixinglu.com/archives/python_and_glade_file_i18n_guide
+
+

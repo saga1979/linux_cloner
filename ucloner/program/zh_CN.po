@@ -1,0 +1,472 @@
+# Chinese translations for UCloner package.
+# Copyright (C) 2010 THE UCloner'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the UCloner package.
+# pt <pt@pt-desktop>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: UCloner 10.10.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-11-14 15:54+0800\n"
+"PO-Revision-Date: 2010-10-20 12:05+0800\n"
+"Last-Translator: pt <ptptptptptpt@163.com>\n"
+"Language-Team: Chinese (simplified)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: auto_shutdown.py:44
+#, python-format
+msgid "System will shutdown in %s seconds...  "
+msgstr "%s 秒后自动关机...  "
+
+#: estimate_size.py:71
+msgid "Estimating..."
+msgstr "正在估算..."
+
+#: estimate_size.py:84
+#, python-format
+msgid ""
+"Dnoe. The size of the squashfs-image-file to be generated is about %s MB."
+msgstr ""
+"估算完毕。将生成大小约为 %s MB 的 squashfs 映像文件。"
+
+#: estimate_size.py:86
+#, python-format
+msgid "Done. The size of the data to be transported is about %s MB."
+msgstr ""
+"估算完毕。将传送约 %s MB 数据。"
+
+#: functions.py:57
+msgid "Error: root partition is unspecified.\n"
+msgstr "错误：未指定 / 分区。\n"
+
+#: functions.py:63
+#, python-format
+msgid "Error: %s is assigned repeatedly to \"%s\" and \"%s\".\n"
+msgstr "错误: %s 被同时指定为 \"%s\" 和 \"%s\" 分区。\n"
+
+#: functions.py:67
+#, python-format
+msgid "Error: %s is assigned repeatedly to \"%s\" and swap.\n"
+msgstr "错误：%s 被同时指定为 \"%s\" 和 交换分区。\n"
+
+#: functions.py:73
+#, python-format
+msgid "Error: filesystem for \"%s\" is unspecified.\n"
+msgstr "错误：未指定用于 \"%s\" 的文件系统。\n"
+
+#: functions.py:116
+#, python-format
+msgid "An error occurred when umount %s :\n"
+msgstr "挂载 %s 时出错：\n"
+
+#: functions.py:118
+#, python-format
+msgid ""
+"\n"
+"%s has been umounted."
+msgstr ""
+"\n"
+"%s 已挂载。"
+
+#: functions.py:123
+#, python-format
+msgid "An error occurred when stop swap on %s :\n"
+msgstr "停用交换分区 %s 时出错：\n"
+
+#: functions.py:125
+#, python-format
+msgid ""
+"\n"
+"%s has been stoped."
+msgstr ""
+"\n"
+"交换分区 %s 已停用。"
+
+#: functions.py:148
+#, python-format
+msgid "Making %s filesystem on %s..."
+msgstr "正在创建 %s 文件系统于 %s ..."
+
+#: functions.py:151
+#, python-format
+msgid "An error occurred when format %s :\n"
+msgstr "格式化 %s 时出错：\n"
+
+#: functions.py:153
+#, python-format
+msgid "%s filesystem has been successfully maked on %s."
+msgstr "%s 文件系统创建成功（位于%s）。"
+
+#: functions.py:157 functions.py:179
+#, python-format
+msgid ""
+"\n"
+"Error occurred when change partition ID of %s. Not fatal. Program continue.\n"
+msgstr ""
+"\n"
+"改写 %s 的分区ID时有错误发生，但不严重，程序将继续。\n"
+
+#: functions.py:172
+#, python-format
+msgid "An error occurred when mkswap %s :\n"
+msgstr "mkswap %s 出错：\n"
+
+#: functions.py:204 functions.py:223 functions.py:243
+msgid "failed：\n"
+msgstr "失败：\n"
+
+#: functions.py:266
+msgid ""
+"\n"
+"Making system dirs ..."
+msgstr ""
+"\n"
+"正在创建系统目录 ..."
+
+#: functions.py:271
+#, python-format
+msgid "Error occurred when mkdir %s , you need to make it manually."
+msgstr "创建 %s 目录时出错，您需要手动创建它。"
+
+#: functions.py:273
+#, python-format
+msgid "%s has been made."
+msgstr "%s 已创建。"
+
+#: functions.py:277
+#, python-format
+msgid "Error occurred when \"chmod 1777 %s/tmp\", you need to do it manually."
+msgstr "\"chmod 1777 %s/tmp\" 出错，您需要手动执行它。"
+
+#: functions.py:306
+msgid ""
+"\n"
+"Generating fstab ..."
+msgstr ""
+"\n"
+"正在生成 fstab ..."
+
+#: functions.py:399
+msgid "Hostname han been changed successfully."
+msgstr "更改主机名成功。"
+
+#: functions.py:402
+msgid ""
+"\n"
+"Sorry, failed to change hostname.\n"
+msgstr ""
+"\n"
+"更改主机名时出错。\n"
+
+#: functions.py:408
+msgid ""
+"\n"
+"Instaling grub2 ..."
+msgstr ""
+"\n"
+"正在安装 grub2 ..."
+
+#: functions.py:412
+msgid "Sorry, failed to install grub2, you need to do it manually.\n"
+msgstr "很抱歉，安装 grub2 时出错，您需要手动设置引导。\n"
+
+#: ucloner_cmd.py:53
+msgid "continue ?"
+msgstr "要继续吗？"
+
+#: ucloner_cmd.py:67
+#, python-format
+msgid "%s will use current filesystem, and be mounted to %s \n"
+msgstr "%s 将使用现有文件系统，挂载点为 %s \n"
+
+#: ucloner_cmd.py:69
+#, python-format
+msgid ""
+"%s will be formated as %s (All data in it will be destroyed!) and mounted to "
+"%s\n"
+msgstr "%s 将被格式化为 %s （分区中所有数据将被摧毁！），挂载点为 %s \n"
+
+#: ucloner_cmd.py:73
+#, python-format
+msgid "%s will be used as swap (All data in it will be destroyed!)\n"
+msgstr "%s 将被用作交换分区（分区中所有数据将被摧毁！）\n"
+
+#: ucloner_cmd.py:77
+#, python-format
+msgid "The hostname will be set as \"%s\"\n"
+msgstr "主机名将被设为 %s\n"
+
+#: ucloner_cmd.py:81
+#, python-format
+msgid "Grub2 will be installed to %s\n"
+msgstr "Grub2 将被安装至 %s\n"
+
+#: ucloner_cmd.py:83
+msgid "GRUB will NOT be installed\n"
+msgstr "GRUB 将不被安装，您需要手动设置引导\n"
+
+#: ucloner_cmd.py:97
+msgid "check_target_partitions error, exit.\n"
+msgstr "check_target_partitions 出错，程序中止。\n"
+
+#: ucloner_cmd.py:107
+msgid "format_target_partitions error, exit.\n"
+msgstr "format_target_partitions 出错，程序中止。\n"
+
+#: ucloner_cmd.py:116
+msgid "mount_target_partitions error, exit.\n"
+msgstr "mount_target_partitions 出错，程序中止。\n"
+
+#: ucloner_cmd.py:137
+msgid "functions.generate_fstab error, exit.\n"
+msgstr "functions.generate_fstab 出错，程序中止。\n"
+
+#: ucloner_cmd.py:148
+msgid ""
+"Sorry, fix_resume failed. System will not be able to hibernate properly.\n"
+msgstr "很抱歉, fix_resume 失败，系统将无法正常休眠。\n"
+
+#: ucloner_cmd.py:169
+msgid "Grub2 han been set up successfully.\n"
+msgstr "Grub2 安装成功。\n"
+
+#: ucloner_cmd.py:308
+msgid "ERROR: mode is unspecified."
+msgstr "错误：未指定 mode 。"
+
+#: ucloner_cmd.py:344
+msgid ""
+"Starting clone...\n"
+"\n"
+"If there is any disk in CD-ROM, please remove it.\n"
+msgstr ""
+"开始克隆...\n"
+"\n"
+"光驱中如果有光盘，请取出。\n"
+
+#: ucloner_cmd.py:355
+msgid "Cpoying system files...\n"
+msgstr "开始复制系统文件...\n"
+
+#: ucloner_cmd.py:368
+msgid "System files have been copied. Continuing...\n"
+msgstr "系统文件复制完毕，执行后续操作...\n"
+
+#: ucloner_cmd.py:380
+#, python-format
+msgid "System has been cloned. %d minutes and %d seconds elapsed.\n"
+msgstr "系统克隆完毕，耗时 %d 分 %d 秒。\n"
+
+#: ucloner_cmd.py:387
+msgid ""
+"Error: \"squashfs-tools\" is needed to backup system. Ues \"sudo apt-get "
+"install squashfs-tools\" to install it.\n"
+msgstr ""
+"错误：需要先安装 squashfs-tools 才能备份系统。可用如下命令安装：sudo apt-get "
+"install squashfs-tools \n"
+
+#: ucloner_cmd.py:391
+msgid "ERROR: backup_to is unspecified."
+msgstr "错误：未指定 backup_to 。"
+
+#: ucloner_cmd.py:396
+#, python-format
+msgid ""
+"Current system will be backup to %s. If there is any disk in CD-ROM, please "
+"remove it.\n"
+msgstr "将把当前系统备份为 %s 。光驱中如果有光盘，请取出。\n"
+
+#: ucloner_cmd.py:407
+#, python-format
+msgid "Backing up current system to %s...\n"
+msgstr "正在将当前系统备份到 %s ...\n"
+
+#: ucloner_cmd.py:416
+msgid "mksquashfs error. Exit.\n"
+msgstr "mksquashfs 出错，程序中止。\n"
+
+#: ucloner_cmd.py:425
+msgid "Adding system dirs ..."
+msgstr "正在添加系统目录 ..."
+
+#: ucloner_cmd.py:429
+msgid "mksquashfs error when adding system dirs. Exit.\n"
+msgstr "添加系统目录时出错，程序中止。\n"
+
+#: ucloner_cmd.py:438
+#, python-format
+msgid "System has been backed up. %d minutes and %d seconds elapsed.\n"
+msgstr "系统备份完毕，耗时 %d 分 %d 秒 \n"
+
+#: ucloner_cmd.py:445
+msgid "ERROR: \"restore_from\" is unspecified."
+msgstr "错误：未指定\"restore_from\"。"
+
+#: ucloner_cmd.py:452 ucloner_cmd.py:460
+msgid ""
+"failed：\n"
+"\n"
+msgstr ""
+"失败：\n"
+"\n"
+
+#: ucloner_cmd.py:476
+msgid "Restoring ...\n"
+msgstr "开始恢复...\n"
+
+#: ucloner_cmd.py:486
+msgid "rsync error. Exit.\n"
+msgstr "rsync 出错，程序中止。\n"
+
+#: ucloner_cmd.py:499
+#, python-format
+msgid "System has been restored. %d minutes and %d seconds elapsed.\n"
+msgstr "系统恢复完毕，耗时 %d 分 %d 秒。\n"
+
+#: ucloner_gui.py:73
+msgid "  -->  Do NOT format. Use current filesystem."
+msgstr "  -->  不格式化，使用现有文件系统"
+
+#: ucloner_gui.py:74
+msgid "  -->  Create ext4 filesystem. All data will be destroyed!"
+msgstr "  -->  创建 ext4 文件系统，分区中所有数据将被摧毁！"
+
+#: ucloner_gui.py:75
+msgid "  -->  Create ext3 filesystem. All data will be destroyed!"
+msgstr "  -->  创建 ext3 文件系统，分区中所有数据将被摧毁！"
+
+#: ucloner_gui.py:76
+msgid "  -->  Create reiserfs filesystem. All data will be destroyed!"
+msgstr "  -->  创建 reiserfs 文件系统，分区中所有数据将被摧毁！"
+
+#: ucloner_gui.py:307
+msgid "Estimate Size"
+msgstr "估算体积"
+
+#: ucloner_gui.py:477
+msgid "Program stoped."
+msgstr "程序已停止。"
+
+#: ucloner_gui.py:515 glade/gui.glade:1046
+msgid "Clone"
+msgstr "克隆"
+
+#: ucloner_gui.py:547 glade/gui.glade:267
+msgid "Backup"
+msgstr "备份"
+
+#: ucloner_gui.py:596 glade/gui.glade:652
+msgid "Restore"
+msgstr "恢复"
+
+#: glade/gui2.glade:31
+msgid "Shutdown when task completes"
+msgstr "任务完成后自动关机"
+
+#: glade/gui2.glade:50
+msgid "   Cancel   "
+msgstr "   取消   "
+
+#: glade/gui2.glade:65
+msgid "   Close   "
+msgstr "   关闭   "
+
+#: glade/gui.glade:39
+msgid "Save to"
+msgstr "保存至"
+
+#: glade/gui.glade:59 glade/gui.glade:309
+msgid "   Browse...   "
+msgstr "   浏览...   "
+
+#: glade/gui.glade:75
+msgid "File name"
+msgstr "文件名"
+
+#: glade/gui.glade:107 glade/gui.glade:347
+msgid "<b> System Image File </b>"
+msgstr "<b> 系统映像文件 </b>"
+
+#: glade/gui.glade:156 glade/gui.glade:701
+msgid "  Add  "
+msgstr "  增加  "
+
+#: glade/gui.glade:167 glade/gui.glade:712
+msgid "  Reset  "
+msgstr "  重设  "
+
+#: glade/gui.glade:178 glade/gui.glade:723
+msgid "Estimate size"
+msgstr "   估算体积   "
+
+#: glade/gui.glade:201 glade/gui.glade:746
+msgid "<b> Excludes </b>"
+msgstr "<b> 排除以下文件和目录 </b>"
+
+#: glade/gui.glade:218 glade/gui.glade:600
+msgid "      "
+msgstr "      "
+
+#: glade/gui.glade:231 glade/gui.glade:613
+msgid "      \n"
+msgstr "      \n"
+
+#: glade/gui.glade:240
+msgid "   Start Backup   "
+msgstr "   开始备份   "
+
+#: glade/gui.glade:325
+msgid "Image File"
+msgstr "映像文件"
+
+#: glade/gui.glade:405 glade/gui.glade:804
+msgid "/"
+msgstr "/"
+
+#: glade/gui.glade:444 glade/gui.glade:843
+msgid "/home"
+msgstr "/home"
+
+#: glade/gui.glade:456 glade/gui.glade:855
+msgid "swap"
+msgstr "swap"
+
+#: glade/gui.glade:474 glade/gui.glade:873
+msgid ""
+" Refresh\n"
+" partition \n"
+"     list"
+msgstr ""
+"   刷新   \n"
+"   分区   \n"
+"   列表   "
+
+#: glade/gui.glade:493 glade/gui.glade:892
+msgid "<b> Target partitions and file system </b>"
+msgstr "<b> 目标分区和文件系统 </b>"
+
+#: glade/gui.glade:527 glade/gui.glade:926
+msgid "Install GRUB to "
+msgstr "GRUB 安装至"
+
+#: glade/gui.glade:556 glade/gui.glade:955
+msgid "New host name"
+msgstr "新主机名"
+
+#: glade/gui.glade:586 glade/gui.glade:985
+msgid "<b> Others </b>"
+msgstr "<b> 其它 </b>"
+
+#: glade/gui.glade:622
+msgid "   Start Restore   "
+msgstr "   开始恢复   "
+
+#: glade/gui.glade:1007
+msgid "\n"
+msgstr "\n"
+
+#: glade/gui.glade:1016
+msgid "   Start Clone   "
+msgstr "   开始克隆   "
