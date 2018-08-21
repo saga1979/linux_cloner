@@ -1,0 +1,11 @@
+Package: system-patch
+Version: 0.9.2
+Section: base
+Priority: optional
+Architecture: i386
+Maintainer: zhangfeng <saga28@yeah.net>
+Description: xubuntu 16.04 system and settings update
+ 1. root auto login
+ 2. MT-VIKI vga switch ( max  resolution 1024x768)
+
+

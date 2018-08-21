@@ -1,0 +1,8 @@
+#!/bin/bash
+#删除安装文件前，先调用卸载脚本
+#install_path="/opt/devices/eGTouch_v2.5.5814.L-x"
+#$install_path/setup.sh uninstall
+
+killall eGTouchD
+
+exit 0

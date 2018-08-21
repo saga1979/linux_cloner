@@ -1,0 +1,11 @@
+#!/bin/bash
+#安装前，如果有以前的版本，先行卸载todo...
+killall eGTouchD
+old_packages=`dpkg --list |grep -i  device-egtouch  | awk '{print $2}'`
+old_packages=($packages)
+
+for old_package in ${old_packages[@]};
+do
+	echo "卸载:" $old_package
+    dpkg --purge $old_package
+done

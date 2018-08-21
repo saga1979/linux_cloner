@@ -1,0 +1,10 @@
+{
+	"server":"us003.jiasudu.pw",
+	"server_port":10356,
+	"password":"meiyoumima",
+	"method": "aes-256-cfb",
+	"timeout":300,
+	"local_address":"127.0.0.1",
+	"local_port":1080,
+	"fast_open":false
+}

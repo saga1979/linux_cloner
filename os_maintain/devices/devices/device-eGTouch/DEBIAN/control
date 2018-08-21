@@ -1,0 +1,9 @@
+Package: device-eGTouch
+Version: 2.5.5814
+Section: base
+Priority: optional
+Architecture: i386
+Maintainer: zhangfeng <saga28@yeah.net>
+Description: H1919PM-UC电磁触控屏
+ !该驱动适用型号为H1912PM-UC的带有电磁笔的触摸屏
+ ！如果型号不匹配，会影响串口设备

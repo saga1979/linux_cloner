@@ -1,0 +1,3 @@
+SUBSYSTEM=="drm" RUN+="/bin/bash /opt/sys/vga_switch.sh"
+
+

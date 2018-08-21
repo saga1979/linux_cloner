@@ -1,0 +1,11 @@
+#!/bin/bash
+#copy安装文件后，运行驱动包自带脚本进行安装
+#install_path="/opt/devices/eGTouch_v2.5.5814.L-x"
+#$install_path/setup.sh
+
+
+#手动安装模式
+#自动启动daemon
+sed -i '$ i /usr/bin/eGTouchD' /etc/rc.local
+#阻塞usb触控驱动
+sed -i -e "\$ablacklist usbtouchscreen" /etc/modprobe.d/blacklist.conf
