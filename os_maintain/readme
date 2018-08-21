@@ -2,24 +2,18 @@
 
 sscm@zzz:/mnt/data/work/gstest/os_maintain$ tree -L 3
 .
+os_maintain/
+├── devices                      #存放设备外设驱动
+│   └── devices
+│       └── device-eGTouch          @电磁笔触摸屏
 ├── readme
-├── scripts									#存放各种工具脚本
-│   ├── deb-build.sh							#执行时传入文件夹参数，会遍历该文件夹，生成相应的.deb安装包
-│   └── release-maintain.sh						#会将工程目录所有符合规则的文件夹打包.deb并生成maintain文件夹
-├── usb-data								#USB资源，包括维护脚本、程序、设备驱动的“源”文件（打包前的文件）
-│   ├── apps									#程序安装包存放目录
-│   │   └── ep_deb_example
-│   ├── devices									#设备安装包存放目录
-│   │   ├── deb_build.sh
-│   │   └── device-eGTouch
-│   └── maintain								#需要copy到USB设备（如U盘）的文件夹，由程序脚本自动生成
-│       ├── device-eGTouch-2.5.5814.deb				#deb结尾的为各种安装包
-|		|....
-|		|....
-|		|   
-│       ├── main.sh									#这个文件在USB设备接入系统时被系统自动加载
-│       └── readme							#给维护人员看的
-└── usb-maintain							#USB维护系统的设置、脚本，作为deb包更新，跟普通程序一样
+├── scripts                      #各种脚本
+│   ├── main.readme
+│   ├── main.sh                     @U盘维护主脚本
+│   └── release-maintain.sh         @运行后生成各种设备驱动和系统patch包
+└── system-patch                  #存放系统设置以及升级（基本不会有升级了）的deb源文件
+  
+
 
 
 
