@@ -1,4 +1,11 @@
-import termios os fcntl json  struct sys
+#!/usr/bin/python3
+import termios 
+import os 
+import fcntl 
+import json  
+import struct 
+import sys
+import subprocess
 
 
 uart_table = { "8250": 1, "16450":2, "16550":3, "16550A":4 }
@@ -6,36 +13,52 @@ uart_table = { "8250": 1, "16450":2, "16550":3, "16550A":4 }
 coms_json = ' {"coms": [\
 {"dev": "/dev/ttyS0", "UART": "16550A", "Port": "0x03f8", "IRQ": 4 },\
 {"dev": "/dev/ttyS1", "UART": "16550A", "Port": "0x02f8", "IRQ": 3 },\
-{"dev": "/dev/ttyS2", "UART": "16550A", "Port": "0x03e8", "IRQ": 7},\
-{"dev": "/dev/ttyS3", "UART": "16550A", "Port": "0x02e8", "IRQ": 7},\
-{"dev": "/dev/ttyS4", "UART": "16550A", "Port": "0x02f0", "IRQ": 7},\
-{"dev": "/dev/ttyS5", "UART": "16550A", "Port": "0x02e0", "IRQ": 7},\
-{"dev": "/dev/ttyS6", "UART": "16550A", "Port": "0x0240", "IRQ": 6},\
-{"dev": "/dev/ttyS7", "UART": "16550A", "Port": "0x0248", "IRQ": 6},\
-{"dev": "/dev/ttyS8", "UART": "16550A", "Port": "0x0250", "IRQ": 11},\
-{"dev": "/dev/ttyS9", "UART": "16550A", "Port": "0x0258", "IRQ": 11}\
+{"dev": "/dev/ttyS2", "UART": "16550A", "Port": "0x0210", "IRQ": 11},\
+{"dev": "/dev/ttyS3", "UART": "16550A", "Port": "0x0218", "IRQ": 11},\
+{"dev": "/dev/ttyS4", "UART": "16550A", "Port": "0x0220", "IRQ": 11},\
+{"dev": "/dev/ttyS5", "UART": "16550A", "Port": "0x0228", "IRQ": 11},\
+{"dev": "/dev/ttyS6", "UART": "16550A", "Port": "0x0300", "IRQ": 10},\
+{"dev": "/dev/ttyS7", "UART": "16550A", "Port": "0x0308", "IRQ": 10},\
+{"dev": "/dev/ttyS8", "UART": "16550A", "Port": "0x0310", "IRQ": 10},\
+{"dev": "/dev/ttyS9", "UART": "16550A", "Port": "0x0318", "IRQ": 10}\
   ] }'
 
+def find_com_dev(port, irq):
+  result = subprocess.run(['ls /dev/ttyS*'],shell=True,  stdout=subprocess.PIPE)
+  devs = result.stdout.decode("utf-8").split('\n')
+  for dev in devs:
+    try:
+      fd = os.open(dev, os.O_RDWR | os.O_NONBLOCK)
+      termios_attr = bytearray([0]*56)
+      fcntl.ioctl(fd, termios.TIOCGSERIAL, termios_attr)
+      termios_attr_unpacked = struct.unpack('iiIiiiiiHbbiHHBHIL', termios_attr)
+      os.close(fd)
+    except FileNotFoundError:
+      continue    
 
-jstr = json.loads(coms_json)
+    if termios_attr_unpacked[2] == port and termios_attr_unpacked[3] == irq:
+      return dev
 
+  return ""
 
+def rename_com_dev(old_name, new_name):
+  os.rename(new_name, new_name+"11")
+  os.rename(old_name, new_name)
+  os.rename(new_name+"11", old_name)
 
 def set_serial(opt):
-  print("set serial:" + opt["dev"])
+
   port_new = int(opt["Port"], 16)
   type_new = uart_table[opt["UART"]]
   irq_new = opt["IRQ"]
 
-  print("port:0x{0:X}".format(port_new))
   fd = os.open(opt["dev"], os.O_RDWR | os.O_NONBLOCK)
 
   termios_attr = bytearray([0]*56)
   fcntl.ioctl(fd, termios.TIOCGSERIAL, termios_attr)
-  print(termios_attr)
-  termios_old_unpacked = struct.unpack('iiIiiiiiHbbiHHBHIL', termios_attr)
-  print(termios_old_unpacked)
-  termios_old_list = list(termios_old_unpacked)
+  # termios_old_unpacked = struct.unpack('iiIiiiiiHbbiHHBHIL', termios_attr)
+  # print(termios_old_unpacked)
+  # termios_old_list = list(termios_old_unpacked)
 
   type_old = struct.unpack("i", termios_attr[0:4])
   if type_new != type_old:
@@ -49,7 +72,39 @@ def set_serial(opt):
   fcntl.ioctl(fd, termios.TIOCSSERIAL, termios_attr)
   os.close(fd)
 
-# for com in jstr["coms"]:
-#   set_serial(com)
+def print_com_config(config):
+  print("dev:{3} type:{0}   port{1}  irq{2}"
+  .format(config["UART"], config["Port"], config["IRQ"], config["dev"]))
 
-set_serial(jstr["coms"][0])
+if __name__ == "__main__":
+  if len(sys.argv) == 2:
+    try:
+      config_file = os.open(sys.argv[1], os.O_RDONLY)
+      coms_json = os.read(config_file, 1024).decode("utf-8")
+      os.close(config_file)
+    except FileExistsError:
+      print("{0} file not exist!".format(sys.argv[1]))
+      
+  jstr = json.loads(coms_json)
+
+  print("you will config com ports with below configs:")
+  for com_config in jstr["coms"]:
+    print_com_config(com_config)
+
+  chose = input("enter Y/y to continue, others to exit:")
+
+  if chose != 'Y' and chose != 'y':
+    exit(0)
+
+  print("ZnVjaw== them all!")
+
+  for com_config in jstr["coms"]:
+    dev = find_com_dev(int(com_config["Port"], 16), int(com_config["IRQ"]))
+    if dev == com_config["dev"]:
+        print("com dev:{0} has correct settings!".format(dev))
+        continue
+    if not dev:
+      set_serial(com_config) #setserial
+      print("success set {}!".format(com_config["dev"]))
+    else:
+      rename_com_dev(dev, com_config["dev"])
