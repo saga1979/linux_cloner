@@ -48,29 +48,32 @@ def rename_com_dev(old_name, new_name):
 
 def set_serial(opt):
 
-  port_new = int(opt["Port"], 16)
-  type_new = uart_table[opt["UART"]]
-  irq_new = opt["IRQ"]
+  try:
+    port_new = int(opt["Port"], 16)
+    type_new = uart_table[opt["UART"]]
+    irq_new = opt["IRQ"]
 
-  fd = os.open(opt["dev"], os.O_RDWR | os.O_NONBLOCK)
+    fd = os.open(opt["dev"], os.O_RDWR | os.O_NONBLOCK)
+    termios_attr = bytearray([0]*56)
+    fcntl.ioctl(fd, termios.TIOCGSERIAL, termios_attr)
+    type_old = struct.unpack("i", termios_attr[0:4])
+    if type_new != type_old:
+      termios_attr[0:4] = type_new.to_bytes(4, sys.byteorder)  
+    port_old = struct.unpack("I", termios_attr[8:12])
+    if port_new != port_old:
+      termios_attr[8:12] = port_new.to_bytes(4, sys.byteorder)
+    irq_old = struct.unpack("i", termios_attr[12:16])
+    if(irq_new != irq_old):
+      termios_attr[12:16] = irq_new.to_bytes(4, sys.byteorder)
+    fcntl.ioctl(fd, termios.TIOCSSERIAL, termios_attr)
+    os.close(fd)
+    return True
+  except OSError as e:
+    print(e.strerror)
+  except Exception as e:
+    print(str(e))
+  return False
 
-  termios_attr = bytearray([0]*56)
-  fcntl.ioctl(fd, termios.TIOCGSERIAL, termios_attr)
-  # termios_old_unpacked = struct.unpack('iiIiiiiiHbbiHHBHIL', termios_attr)
-  # print(termios_old_unpacked)
-  # termios_old_list = list(termios_old_unpacked)
-
-  type_old = struct.unpack("i", termios_attr[0:4])
-  if type_new != type_old:
-    termios_attr[0:4] = type_new.to_bytes(4, sys.byteorder)  
-  port_old = struct.unpack("I", termios_attr[8:12])
-  if port_new != port_old:
-    termios_attr[8:12] = port_new.to_bytes(4, sys.byteorder)
-  irq_old = struct.unpack("i", termios_attr[12:16])
-  if(irq_new != irq_old):
-    termios_attr[12:16] = irq_new.to_bytes(4, sys.byteorder)
-  fcntl.ioctl(fd, termios.TIOCSSERIAL, termios_attr)
-  os.close(fd)
 
 def print_com_config(config):
   print("dev:{3} type:{0}   port{1}  irq{2}"
@@ -82,29 +85,37 @@ if __name__ == "__main__":
       config_file = os.open(sys.argv[1], os.O_RDONLY)
       coms_json = os.read(config_file, 1024).decode("utf-8")
       os.close(config_file)
-    except FileExistsError:
-      print("{0} file not exist!".format(sys.argv[1]))
-      
-  jstr = json.loads(coms_json)
+    except OSError as e:
+      print("{0} open failed because :\n{1}!".format(sys.argv[1], e.strerror))
+      print("setserial will use the default settings.")
+  try:
+    jstr = json.loads(coms_json)
 
-  print("you will config com ports with below configs:")
-  for com_config in jstr["coms"]:
-    print_com_config(com_config)
+    print("you will config com ports with below configs:")
+    for com_config in jstr["coms"]:
+      print_com_config(com_config)
 
-  chose = input("enter Y/y to continue, others to exit:")
+    chose = input("enter Y/y to continue, others to exit:")
 
-  if chose != 'Y' and chose != 'y':
-    exit(0)
+    if chose != 'Y' and chose != 'y':
+      sys.exit(0)
 
-  print("ZnVjaw== them all!")
+    print("ZnVjaw== them all!")
 
-  for com_config in jstr["coms"]:
-    dev = find_com_dev(int(com_config["Port"], 16), int(com_config["IRQ"]))
-    if dev == com_config["dev"]:
-        print("com dev:{0} has correct settings!".format(dev))
-        continue
-    if not dev:
-      set_serial(com_config) #setserial
-      print("success set {}!".format(com_config["dev"]))
-    else:
-      rename_com_dev(dev, com_config["dev"])
+    for com_config in jstr["coms"]:
+      dev = find_com_dev(int(com_config["Port"], 16), int(com_config["IRQ"]))
+      if dev == com_config["dev"]:
+          print("com dev: {0} has correct settings!".format(dev))
+          continue
+      if not dev:
+        if set_serial(com_config):
+          print("success set: {}".format(com_config["dev"]))
+        else:
+          print("failed set: {}".format(com_config["dev"]))
+      else:
+        rename_com_dev(dev, com_config["dev"])
+        print("success rename:{} to {}".format(dev, com_config["dev"]))
+  except json.JSONDecodeError as e:
+    print(e.strerror)
+  except Exception as e:
+    print(str(e))
