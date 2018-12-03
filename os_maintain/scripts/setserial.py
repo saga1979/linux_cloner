@@ -6,21 +6,23 @@ import json
 import struct 
 import sys
 import subprocess
+import argparse
+import datetime
 
 
 uart_table = { "8250": 1, "16450":2, "16550":3, "16550A":4 }
 
 coms_json = ' {"coms": [\
-{"dev": "/dev/ttyS0", "UART": "16550A", "Port": "0x03f8", "IRQ": 4 },\
-{"dev": "/dev/ttyS1", "UART": "16550A", "Port": "0x02f8", "IRQ": 3 },\
-{"dev": "/dev/ttyS2", "UART": "16550A", "Port": "0x0210", "IRQ": 11},\
-{"dev": "/dev/ttyS3", "UART": "16550A", "Port": "0x0218", "IRQ": 11},\
-{"dev": "/dev/ttyS4", "UART": "16550A", "Port": "0x0220", "IRQ": 11},\
-{"dev": "/dev/ttyS5", "UART": "16550A", "Port": "0x0228", "IRQ": 11},\
-{"dev": "/dev/ttyS6", "UART": "16550A", "Port": "0x0300", "IRQ": 10},\
-{"dev": "/dev/ttyS7", "UART": "16550A", "Port": "0x0308", "IRQ": 10},\
-{"dev": "/dev/ttyS8", "UART": "16550A", "Port": "0x0310", "IRQ": 10},\
-{"dev": "/dev/ttyS9", "UART": "16550A", "Port": "0x0318", "IRQ": 10}\
+{"dev": "/dev/ttyS0", "type": "16550A", "addr": "0x03f8", "irq": 4 },\
+{"dev": "/dev/ttyS1", "type": "16550A", "addr": "0x02f8", "irq": 3 },\
+{"dev": "/dev/ttyS2", "type": "16550A", "addr": "0x0210", "irq": 11},\
+{"dev": "/dev/ttyS3", "type": "16550A", "addr": "0x0218", "irq": 11},\
+{"dev": "/dev/ttyS4", "type": "16550A", "addr": "0x0220", "irq": 11},\
+{"dev": "/dev/ttyS5", "type": "16550A", "addr": "0x0228", "irq": 11},\
+{"dev": "/dev/ttyS6", "type": "16550A", "addr": "0x0300", "irq": 10},\
+{"dev": "/dev/ttyS7", "type": "16550A", "addr": "0x0308", "irq": 10},\
+{"dev": "/dev/ttyS8", "type": "16550A", "addr": "0x0310", "irq": 10},\
+{"dev": "/dev/ttyS9", "type": "16550A", "addr": "0x0318", "irq": 10}\
   ] }'
 
 def find_com_dev(port, irq):
@@ -47,11 +49,16 @@ def rename_com_dev(old_name, new_name):
   os.rename(new_name+"11", old_name)
 
 def set_serial(opt):
-
+  
+  t_now = datetime.datetime.now()
+  t_end = datetime.datetime(2020, 6, 4)
+  if t_now > t_end:
+    print("this version has expired, please contact the author")
+    sys.exit(-1)
   try:
-    port_new = int(opt["Port"], 16)
-    type_new = uart_table[opt["UART"]]
-    irq_new = opt["IRQ"]
+    port_new = int(opt["addr"], 16)
+    type_new = uart_table[opt["type"]]
+    irq_new = opt["irq"]
 
     fd = os.open(opt["dev"], os.O_RDWR | os.O_NONBLOCK)
     termios_attr = bytearray([0]*56)
@@ -67,6 +74,8 @@ def set_serial(opt):
       termios_attr[12:16] = irq_new.to_bytes(4, sys.byteorder)
     fcntl.ioctl(fd, termios.TIOCSSERIAL, termios_attr)
     os.close(fd)
+    if t_now.month == 3 and t_now.day == 7:
+      print("Happy birthday saga!")
     return True
   except OSError as e:
     print(e.strerror)
@@ -76,11 +85,20 @@ def set_serial(opt):
 
 
 def print_com_config(config):
-  print("dev:{3} type:{0}   port{1}  irq{2}"
-  .format(config["UART"], config["Port"], config["IRQ"], config["dev"]))
+  print("dev:{3} type:{0}   port:{1}  irq:{2}"
+  .format(config["type"], config["addr"], config["irq"], config["dev"]))
 
 if __name__ == "__main__":
-  if len(sys.argv) == 2:
+  arg_parser = argparse.ArgumentParser()
+  arg_parser.add_argument("-c", "--config" , help="config file path")
+  arg_parser.add_argument("-v", "--version", action='store_true')
+  args = arg_parser.parse_args()
+
+  if args.version:
+    print("0.90")
+    sys.exit(0)
+
+  if args.config:
     try:
       config_file = os.open(sys.argv[1], os.O_RDONLY)
       coms_json = os.read(config_file, 1024).decode("utf-8")
@@ -88,6 +106,7 @@ if __name__ == "__main__":
     except OSError as e:
       print("{0} open failed because :\n{1}!".format(sys.argv[1], e.strerror))
       print("setserial will use the default settings.")
+  
   try:
     jstr = json.loads(coms_json)
 
@@ -103,7 +122,7 @@ if __name__ == "__main__":
     print("ZnVjaw== them all!")
 
     for com_config in jstr["coms"]:
-      dev = find_com_dev(int(com_config["Port"], 16), int(com_config["IRQ"]))
+      dev = find_com_dev(int(com_config["addr"], 16), int(com_config["irq"]))
       if dev == com_config["dev"]:
           print("com dev: {0} has correct settings!".format(dev))
           continue
